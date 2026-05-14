@@ -1,0 +1,44 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# ===== Virtual Environment =====
+venv/
+env/
+.venv/
+ENV/
+
+# ===== Flask / Instance =====
+instance/
+
+# ===== Database =====
+*.db
+*.sqlite3
+
+# ===== IDE / Editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== OS Files =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Distribution / Build =====
+dist/
+build/
+*.egg-info/
+*.egg
+
+# ===== Environment Variables =====
+.env
+.flaskenv
+
+# ===== Byte-compiled / Logs =====
+*.log
+*.pot
