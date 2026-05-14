@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}My Placements{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">My Placement History</h3>
+
+    {% if placements %}
+        {% for p in placements %}
+        <div class="card mb-3 p-3">
+            <h5>{{ p.drive.title }}</h5>
+            <p>Company: {{ p.company.company_name }}</p>
+            <p>Package: {{ p.package }} LPA</p>
+            <p>Date: {{ p.placed_on.strftime('%d %b %Y') }}</p>
+            <div>
+            <span class="badge bg-success">{{ p.status }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No placements yet.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Drives{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">Drives</h3>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-dark">
+            Back
+        </a>
+    </div>
+
+    <div class="row g-4">
+
+        {% for drive, company in drives %}
+        <div class="col-md-6">
+
+            <div class="card drive-card shadow-sm rounded-4 p-4 h-100">
+
+                <h5 class="fw-bold mb-2">{{ drive.title }}</h5>
+
+                <p class="text-muted small mb-2">
+                    <strong>Company:</strong> {{ company.company_name }} ({{ company.display_id }})
+                </p>
+
+                <p class="small mb-2">
+                    <strong>HR Contact:</strong> {{ company.hr_contact }}
+                </p>
+
+                <p class="mb-3">{{ drive.description }}</p>
+
+                <p class="small mb-2">
+                    <strong>Eligibility:</strong> {{ drive.eligibility }}
+                </p>
+
+                <p class="small mb-3">
+                    <strong>Deadline:</strong> {{ drive.deadline }}
+                </p>
+
+                <p class="mb-3">
+                    {% if drive.status == "approved" %}
+                        <span class="badge bg-success">Approved</span>
+                    {% elif drive.status == "pending" %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% elif drive.status == "rejected" %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% elif drive.status == "closed_by_company" %}
+                        <span class="badge bg-secondary">Closed by Company</span>
+                    {% elif drive.status == "closed_by_admin" %}
+                        <span class="badge bg-dark">Closed by Admin</span>
+                    {% endif %}
+                </p>
+
+                <div class="d-flex gap-2 flex-wrap">
+
+                    {% if drive.status == "pending" %}
+                        <a href="{{ url_for('admin.approve_drive', drive_id=drive.id) }}"
+                           class="btn btn-sm btn-success">
+                            Approve
+                        </a>
+                        <a href="{{ url_for('admin.reject_drive', drive_id=drive.id) }}"
+                           class="btn btn-sm btn-warning">
+                            Reject
+                        </a>
+                    {% endif %}
+
+                    {% if drive.status == "approved" %}
+                        <a href="{{ url_for('admin.close_drive', drive_id=drive.id) }}"
+                           class="btn btn-sm btn-danger">
+                            Close
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+        {% else %}
+            <div class="col-12 text-center text-muted">
+                No drives available.
+            </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock %}

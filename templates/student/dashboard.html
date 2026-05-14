@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">Student Dashboard</h3>
+
+    <!-- Welcome Card -->
+    <div class="card rounded-4 shadow-sm border-0 mb-4 overflow-hidden">
+        <div style="background: linear-gradient(135deg, #1E293B, #334155); padding: 20px 24px;">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h4 class="fw-bold text-white mb-1">Welcome, {{ current_user.name }}</h4>
+                    <div class="text-light small">
+                        <span class="badge bg-light text-dark me-2">ID: {{ student.id }}</span>
+                        {{ student.branch if student.branch else "Branch not set" }}
+                        {% if student.cgpa %}
+                            &nbsp;·&nbsp; CGPA: {{ student.cgpa }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #3B82F6;">
+                <h6 class="text-muted">Total Applications</h6>
+                <h2 class="fw-bold" style="color: #3B82F6;">{{ stats.applications }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #F59E0B;">
+                <h6 class="text-muted">Shortlisted</h6>
+                <h2 class="fw-bold" style="color: #F59E0B;">{{ stats.shortlisted }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #22C55E;">
+                <h6 class="text-muted">Placements</h6>
+                <h2 class="fw-bold" style="color: #22C55E;">{{ stats.placements }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="d-flex gap-2 flex-wrap mb-4">
+        <a href="{{ url_for('student.drives') }}" class="btn btn-outline-dark">Apply for Drives</a>
+        <a href="{{ url_for('student.applications') }}" class="btn btn-outline-dark">All Applications</a>
+        <a href="{{ url_for('student.placements') }}" class="btn btn-outline-success">My Placements</a>
+        <a href="{{ url_for('student.profile') }}" class="btn btn-outline-dark">My Profile</a>
+    </div>
+
+    <!-- Recent Applications -->
+    <h5 class="fw-bold">Recent Applications</h5>
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Drive</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application, drive, company in applied %}
+                    <tr>
+                        <td>{{ drive.title }}</td>
+                        <td>{{ company.company_name }}</td>
+                        <td>
+                            {% if application.status == "Selected" %}
+                                <span class="badge bg-success">{{ application.status }}</span>
+                            {% elif application.status == "Rejected" %}
+                                <span class="badge bg-danger">{{ application.status }}</span>
+                            {% elif application.status == "Shortlisted" %}
+                                <span class="badge bg-warning text-dark">{{ application.status }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ application.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">
+                            No applications yet.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+

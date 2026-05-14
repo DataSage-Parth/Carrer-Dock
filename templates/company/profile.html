@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Company Profile{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">Company Profile</h3>
+
+    <div class="card p-4 rounded-4 shadow-sm border-0">
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <h6 class="text-muted">Company Name</h6>
+                <div class="fw-bold">{{ company.company_name }}</div>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-muted">Company ID</h6>
+                <div class="fw-bold">{{ company.display_id }}</div>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-muted">Status</h6>
+                <div>
+                    {% if company.status == "approved" %}
+                        <span class="badge bg-success">Approved</span>
+                    {% elif company.status == "pending" %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% else %}
+                        <span class="badge bg-danger">{{ company.status }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label fw-bold">HR Contact</label>
+                <input type="text" name="hr_contact" class="form-control"
+                       value="{{ company.hr_contact or '' }}"
+                       placeholder="HR name or phone number">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Website</label>
+                <input type="url" name="website" class="form-control"
+                       value="{{ company.website or '' }}"
+                       placeholder="https://yourcompany.com">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Description</label>
+                <textarea name="description" class="form-control" rows="4"
+                          placeholder="Tell students about your company">{{ company.description or '' }}</textarea>
+            </div>
+
+            <button class="btn btn-dark btn-lg">Save Changes</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

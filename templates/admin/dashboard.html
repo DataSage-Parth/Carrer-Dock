@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">Admin Dashboard</h3>
+
+    <div class="row g-3">
+        <div class="col-md-2">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #3B82F6;">
+                <h6 class="text-muted">Students</h6>
+                <h2 class="fw-bold" style="color: #3B82F6;">{{ stats.students }}</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #8B5CF6;">
+                <h6 class="text-muted">Companies</h6>
+                <h2 class="fw-bold" style="color: #8B5CF6;">{{ stats.companies }}</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #F59E0B;">
+                <h6 class="text-muted">Drives</h6>
+                <h2 class="fw-bold" style="color: #F59E0B;">{{ stats.drives }}</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #14B8A6;">
+                <h6 class="text-muted">Applications</h6>
+                <h2 class="fw-bold" style="color: #14B8A6;">{{ stats.applications }}</h2>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #22C55E;">
+                <h6 class="text-muted">Placements</h6>
+                <h2 class="fw-bold" style="color: #22C55E;">{{ stats.placements }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="d-flex gap-2 flex-wrap mb-4">
+        <a href="{{ url_for('admin.students') }}" class="btn btn-outline-dark">Manage Students</a>
+        <a href="{{ url_for('admin.companies') }}" class="btn btn-outline-dark">Manage Companies</a>
+        <a href="{{ url_for('admin.drives') }}" class="btn btn-outline-dark">Manage Drives</a>
+        <a href="{{ url_for('admin.applications') }}" class="btn btn-outline-dark">View Applications</a>
+        <a href="{{ url_for('admin.placements') }}" class="btn btn-outline-success">View Placements</a>
+        <a href="{{ url_for('admin.search') }}" class="btn btn-outline-dark">Search</a>
+    </div>
+
+<!-- Chart section -->
+<h5 class="fw-bold mb-3">Portal Overview</h5>
+
+<div class="card shadow-sm rounded-4 p-4 mb-4">
+     <canvas id="adminChart"></canvas>
+</div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById('adminChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Students', 'Companies', 'Drives', 'Applications', 'Placements'],
+            datasets: [{
+                label: 'Platform Statistics',
+                data: {{ [
+                    stats.students,
+                    stats.companies,
+                    stats.drives,
+                    stats.applications,
+                    stats.placements
+                ] | tojson }},
+                backgroundColor: [
+                    '#3B82F6',
+                    '#8B5CF6',
+                    '#F59E0B',
+                    '#14B8A6',
+                    '#22C55E'
+                ],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 5
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}

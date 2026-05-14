@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}All Placements{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold">All Placements</h3>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-dark">Back</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Student</th>
+                    <th>Student ID</th>
+                    <th>Company</th>
+                    <th>Drive</th>
+                    <th>Package (LPA)</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for placement, student, user, company, drive in placements %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ student.id }}</td>
+                    <td>{{ company.company_name }}</td>
+                    <td>{{ drive.title }}</td>
+                    <td>{{ placement.package }}</td>
+                    <td>
+                        {% if placement.placed_on %}
+                            {{ placement.placed_on.strftime("%d-%m-%Y") }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        No placements yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

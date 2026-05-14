@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Applicants{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">Applicants</h3>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>CGPA</th>
+                    <th>Branch</th>
+                    <th>Drive</th>
+                    <th>Resume</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application, student, user, drive in applicants %}
+                    <tr>
+                        <td>{{ student.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ student.cgpa if student.cgpa else "—" }}</td>
+                        <td>{{ student.branch }}</td>
+                        <td>{{ drive.title }}</td>
+                        <td>
+                        {% if student.resume_link %}
+                            <a href="{{ student.resume_link }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                View
+                            </a>
+                        {% else %}
+                            <span class="badge bg-secondary">No Resume</span>
+                        {% endif %}
+                    </td>
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ application.status }}
+                            </span>
+                        </td>
+                        <td class="d-flex gap-1 flex-wrap">
+
+                            <a href="{{ url_for('company.update_application',
+                                                application_id=application.id,
+                                                status='Shortlisted') }}"
+                               class="btn btn-sm btn-outline-dark">
+                                Shortlist
+                            </a>
+
+                            <form method="POST"
+                                  action="{{ url_for('company.mark_selected') }}"
+                                  class="d-flex gap-1">
+
+                                <input type="hidden"
+                                       name="application_id"
+                                       value="{{ application.id }}">
+
+                                <input type="number"
+                                       name="package"
+                                       step="0.1"
+                                       min="1"
+                                       placeholder="LPA"
+                                       required
+                                       class="form-control form-control-sm"
+                                       style="width:80px;">
+
+                                <button type="submit"
+                                        class="btn btn-sm btn-success">
+                                    Select
+                                </button>
+                            </form>
+
+                            <a href="{{ url_for('company.update_application',
+                                                application_id=application.id,
+                                                status='Rejected') }}"
+                               class="btn btn-sm btn-danger">
+                                Reject
+                            </a>
+
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">
+                            No applicants yet.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

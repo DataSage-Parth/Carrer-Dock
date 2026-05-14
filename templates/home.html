@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}CarrerDock{% endblock %}
+
+{% block content %}
+
+<div class="hero-section">
+    <div class="container main-content">
+        <div class="row align-items-center g-5">
+
+            <!-- LEFT CONTENT -->
+            <div class="col-lg-7">
+                <span class="badge text-bg-primary mb-3 px-3 py-2">
+                    Training & Placement Cell
+                </span>
+
+                <h1 class="fw-bold display-5 mb-3">
+                    CarrerDock <br> Placement Portal
+                </h1>
+
+                <p class="text-muted fs-5">
+                    Connecting students, recruiters, and institutions through a single placement platform.
+                </p>
+            </div>
+
+            <!-- RIGHT BOX -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0 rounded-4 p-4">
+                    <h5 class="fw-bold mb-2">Get Started</h5>
+                    <p class="text-muted small mb-4">
+                        Login or create an account to continue.
+                    </p>
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-dark btn-lg">
+                            Sign In
+                        </a>
+                        <a href="{{ url_for('auth.register_student') }}" class="btn btn-outline-dark btn-lg">
+                            Student Signup
+                        </a>
+                        <a href="{{ url_for('auth.register_company') }}" class="btn btn-outline-dark btn-lg">
+                            Company Signup
+                        </a>
+                    </div>
+
+                    <hr class="my-4">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

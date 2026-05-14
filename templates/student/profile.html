@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Student Profile{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">My Profile</h3>
+
+    <div class="card p-4 rounded-4 shadow-sm border-0">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <h6 class="text-muted">Name</h6>
+                <div class="fw-bold">{{ user.name }}</div>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-muted">Email</h6>
+                <div class="fw-bold">{{ user.email }}</div>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-muted">Student ID</h6>
+                <div class="fw-bold">{{ student.id }}</div>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-muted">Branch</h6>
+                <div class="fw-bold">{{ student.branch }}</div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Skills</label>
+                <textarea name="skills" class="form-control" rows="4">{{ student.skills }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Resume Link (Google Drive)</label>
+                <input type="url" name="resume_link" class="form-control"
+                       placeholder="Paste your Google Drive resume link"
+                       value="{{ student.resume_link if student.resume_link else '' }}">
+
+                <div class="small text-danger mt-1">
+                     ⚠ Make sure the link is set to "Anyone with the link can view"
+                </div>
+            </div>
+
+            {% if student.resume_link %}
+                <div class="small text-muted mb-3">
+                    Current Resume:
+                    <a target="_blank" href="{{ student.resume_link }}">
+                        View Resume
+                    </a>
+                </div>
+            {% endif %}
+
+            <button class="btn btn-dark btn-lg">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

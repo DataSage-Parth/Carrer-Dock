@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Company Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">Company Dashboard</h3>
+
+    <div class="card rounded-4 shadow-sm border-0 mb-4 overflow-hidden">
+        <div style="background: linear-gradient(135deg, #1E293B, #334155); padding: 20px 24px;">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="badge bg-light text-dark mb-2">{{ company.display_id }}</span>
+                    <h4 class="fw-bold text-white mb-1">{{ company.company_name }}</h4>
+                    <div class="text-light small">{{ company.user.email }}</div>
+                </div>
+                <div>
+                    {% if company.status == "approved" %}
+                        <span class="badge bg-success px-3 py-2">Approved</span>
+                    {% elif company.status == "pending" %}
+                        <span class="badge bg-warning text-dark px-3 py-2">Pending</span>
+                    {% elif company.status == "rejected" %}
+                        <span class="badge bg-danger px-3 py-2">Rejected</span>
+                    {% else %}
+                        <span class="badge bg-secondary px-3 py-2">{{ company.status }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #3B82F6;">
+                <h6 class="text-muted">Total Drives</h6>
+                <h2 class="fw-bold" style="color: #3B82F6;">{{ stats.drives }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #F59E0B;">
+                <h6 class="text-muted">Total Applications</h6>
+                <h2 class="fw-bold" style="color: #F59E0B;">{{ stats.applications }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm rounded-4" style="border-left: 4px solid #22C55E;">
+                <h6 class="text-muted">Total Placements</h6>
+                <h2 class="fw-bold" style="color: #22C55E;">{{ stats.placements }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2 flex-wrap">
+        <a href="{{ url_for('company.create_drive') }}" class="btn btn-outline-dark">Create Drive</a>
+        <a href="{{ url_for('company.drives') }}" class="btn btn-outline-dark">My Drives</a>
+        <a href="{{ url_for('company.applicants') }}" class="btn btn-outline-dark">Applicants</a>
+        <a href="{{ url_for('company.placements') }}" class="btn btn-outline-success">Placements</a>
+    </div>
+
+    <h5 class="fw-bold mt-4 mb-3">Drives & Applicants</h5>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Job Title</th>
+                    <th>Status</th>
+                    <th>Deadline</th>
+                    <th>Applicants</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in drive_data %}
+                    <tr>
+                        <td>{{ item.drive.title }}</td>
+                        <td>
+                            {% if item.drive.status == "approved" %}
+                                <span class="badge bg-success">Approved</span>
+                            {% elif item.drive.status == "pending" %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ item.drive.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.drive.deadline }}</td>
+                        <td><span class="badge bg-primary">{{ item.applicant_count }}</span></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No drives created yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Chart Section -->
+    <hr class="my-4">
+
+    <h5 class="fw-bold mb-3">Company Overview</h5>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm rounded-4 p-4 mb-4">
+                <canvas id="companyChart" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const chartData = {{ stats | tojson }};
+
+    const ctx = document.getElementById('companyChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Drives', 'Applications', 'Placements'],
+            datasets: [{
+                label: 'Company Statistics',
+                data: [
+                    chartData.drives,
+                    chartData.applications,
+                    chartData.placements
+                ],
+                backgroundColor: [
+                    '#3B82F6',
+                    '#F59E0B',
+                    '#22C55E'
+                ],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+{% endblock %}

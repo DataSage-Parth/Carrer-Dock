@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}My Drives{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">My Drives</h3>
+
+    <div class="row g-4">
+
+        {% for drive in drives %}
+        <div class="col-md-6">
+            <div class="card drive-card p-4 h-100 shadow-sm">
+
+                <h5 class="fw-bold mb-2">{{ drive.title }}</h5>
+
+                <div class="mb-3 d-flex align-items-center gap-2">
+                    {% if drive.status == "approved" %}
+                        <span class="badge bg-success">Approved</span>
+
+                    {% elif drive.status == "pending" %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+
+                    {% elif drive.status == "closed_by_company" %}
+                        <span class="badge bg-secondary">Closed</span>
+
+                    {% elif drive.status == "closed_by_admin" %}
+                        <span class="badge bg-dark">Closed by Admin</span>
+
+                    {% elif drive.status == "rejected" %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% endif %}
+                </div>
+
+                <p class="mb-2">
+                    {{ drive.description }}
+                </p>
+
+                <p class="mb-2">
+                    <b>Eligibility:</b> {{ drive.eligibility }}
+                </p>
+
+                <p class="mb-2">
+                    <b>Deadline:</b> {{ drive.deadline }}
+                </p>
+
+                <p class="mb-3">
+                    <b>Applicants:</b> {{ drive.applications|length }}
+                </p>
+
+                <div class="d-flex gap-2 flex-wrap">
+
+                    {% if drive.status not in ["closed_by_company", "closed_by_admin"] %}
+                        
+                        <a href="{{ url_for('company.edit_drive', drive_id=drive.id) }}"
+                           class="btn btn-sm btn-outline-dark">
+                           Edit
+                        </a>
+
+                        <a href="{{ url_for('company.close_drive', drive_id=drive.id) }}"
+                           class="btn btn-sm btn-danger">
+                           Close
+                        </a>
+
+                    {% else %}
+
+                        <button class="btn btn-sm btn-outline-secondary" disabled>
+                            Edit
+                        </button>
+
+                        <button class="btn btn-sm btn-secondary" disabled>
+                            Closed
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="text-center text-muted">
+                No drives yet.
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

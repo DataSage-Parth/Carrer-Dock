@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Placements{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <h3 class="fw-bold mb-4">Placed Students</h3>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Student ID</th>
+                    <th>Drive</th>
+                    <th>Package (LPA)</th>
+                    <th>Placed On</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for placement, student, user, drive in placements %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ student.id }}</td>
+                    <td>{{ drive.title }}</td>
+                    <td>{{ placement.package }}</td>
+                    <td>{{ placement.placed_on }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        No placements yet.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}My Applications{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">My Applications</h3>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Drive</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for application, drive, company in applications %}
+                <tr>
+                    <td>{{ drive.title }}</td>
+                    <td>{{ company.company_name }}</td>
+                    <td>
+                        <span class="badge bg-secondary">
+                            {{ application.status }}
+                        </span>
+                    </td>
+                    <td>{{ application.applied_on }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        No applications yet.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

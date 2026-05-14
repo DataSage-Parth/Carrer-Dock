@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Companies{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold">Companies</h3>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-dark">Back</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Company ID</th>
+                    <th>Company</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>User</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for company, user in companies %}
+                <tr>
+                    <td>{{ company.display_id }}</td>
+                    <td>{{ company.company_name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span class="badge bg-secondary">{{ company.status }}</span>
+                    </td>
+                    <td>
+                        {% if user.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Blocked</span>
+                        {% endif %}
+                    </td>
+                    <td class="d-flex gap-2 flex-wrap">
+                        {% if user.is_active %}
+                            <a href="{{ url_for('admin.toggle_user', user_id=user.id, source='companies') }}"
+                               class="btn btn-sm btn-warning">
+                               Block
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('admin.toggle_user', user_id=user.id, source='companies') }}"
+                               class="btn btn-sm btn-success">
+                               Unblock
+                            </a>
+                        {% endif %}
+
+                        {% if company.status != "approved" %}
+                            <a href="{{ url_for('admin.approve_company', company_id=company.id) }}"
+                               class="btn btn-sm btn-success">Approve</a>
+                        {% endif %}
+
+                        <form method="POST"
+                              action="{{ url_for('admin.blacklist_company', company_id=company.id) }}"
+                              style="display:inline;">
+                            <button class="btn btn-sm btn-danger"
+                                onclick="return confirm('Delete this company permanently?')">
+                                Blacklist
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
