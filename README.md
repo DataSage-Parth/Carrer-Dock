@@ -273,8 +273,8 @@ placement-portal/
 
 ```bash
 # 1. Download or clone the repository
-git clone <repo-url>
-cd placement-portal
+git clone https://github.com/DataSage-Parth/Carrer-Dock.git
+cd <folder-name>
 
 # 2. Create a virtual environment
 python -m venv venv
